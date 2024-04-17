@@ -305,70 +305,65 @@ class Cleantalk {
      */
     public function get_servers_ip($host)
     {
-        if (!isset($host))
+        if ( ! isset($host) ) {
             return null;
+        }
 
         $servers = array();
 
         // Get DNS records about URL
-        if (function_exists('dns_get_record')) {
-            $records = dns_get_record($host, DNS_A);
-            if ($records !== FALSE) {
-                foreach ($records as $server) {
+        if ( function_exists('dns_get_record') ) {
+            $records = @dns_get_record($host, DNS_A);
+            if ( $records !== false ) {
+                foreach ( $records as $server ) {
                     $servers[] = $server;
                 }
             }
         }
 
         // Another try if first failed
-        if (count($servers) == 0 && function_exists('gethostbynamel')) {
+        if ( count($servers) === 0 && function_exists('gethostbynamel') ) {
             $records = gethostbynamel($host);
-            if ($records !== FALSE) {
-                foreach ($records as $server) {
+            if ( $records !== false ) {
+                foreach ( $records as $server ) {
                     $servers[] = array(
-                        "ip" => $server,
+                        "ip"   => $server,
                         "host" => $host,
-                        "ttl" => $this->server_ttl
+                        "ttl"  => $this->server_ttl
                     );
                 }
             }
         }
 
         // If couldn't get records
-        if (count($servers) == 0){
-
+        if ( count($servers) === 0 ) {
             $servers[] = array(
-                "ip" => null,
+                "ip"   => null,
                 "host" => $host,
-                "ttl" => $this->server_ttl
+                "ttl"  => $this->server_ttl
             );
-
-            // If records recieved
+            // If records received
         } else {
-
-            $tmp = null;
+            $tmp               = array();
             $fast_server_found = false;
 
-            foreach ($servers as $server) {
-
-                if ($fast_server_found) {
+            foreach ( $servers as $server ) {
+                if ( $fast_server_found ) {
                     $ping = $this->max_server_timeout;
                 } else {
                     $ping = $this->httpPing($server['ip']);
-                    $ping = $ping * 1000;
+                    $ping *= 1000;
                 }
 
-                $tmp[$ping] = $server;
+                $tmp[(int)$ping] = $server;
 
-                $fast_server_found = $ping < $this->min_server_timeout ? true : false;
-
+                $fast_server_found = $ping < $this->min_server_timeout;
             }
 
-            if (count($tmp)){
+            if ( count($tmp) ) {
                 ksort($tmp);
                 $response = $tmp;
             }
-
         }
 
         return empty($response) ? null : $response;
