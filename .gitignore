@@ -1,4 +1,5 @@
 *
+!install.xml
 # for 3.x and common
 !/admin/
 !/admin/controller/
