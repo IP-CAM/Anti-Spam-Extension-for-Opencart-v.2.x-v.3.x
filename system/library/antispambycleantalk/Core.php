@@ -27,6 +27,16 @@ class Core
     private static $instance;
 
     /**
+     * @var RemoteCalls
+     */
+    public $rc;
+
+    /**
+     * @var SFW
+     */
+    public $sfw;
+
+    /**
      * @param \Registry  $registry  Registry Object
      *
      * @return self object
