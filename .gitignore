@@ -63,6 +63,10 @@
 !/system/
 !/system/library/
 !/system/library/antispambycleantalk
+!/system/library/antispambycleantalk/*
+!/system/library/antispambycleantalk/Cleantalk/*
+!/system/library/antispambycleantalk/Cleantalk/Antispam/*
+!/system/library/antispambycleantalk/Cleantalk/Common/*
 
 # especially for 2.3.*
 !/admin/view/template/extension/module/antispambycleantalk.tpl
