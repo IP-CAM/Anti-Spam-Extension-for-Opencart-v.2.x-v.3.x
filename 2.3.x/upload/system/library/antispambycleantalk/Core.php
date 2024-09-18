@@ -238,7 +238,7 @@ class Core
             case 'order':
                 $ct_request->sender_email = $data['email'];
                 $ct_request->sender_nickname = trim($data['firstname']).' '.trim($data['lastname']);
-                $ct_result = $ct->isAllowUser($ct_request);
+                $ct_result = $ct->isAllowMessage($ct_request);
                 break;
             case 'contact':
                 $ct_request->sender_email = $data['email'];
@@ -255,6 +255,13 @@ class Core
                 $ct_request->sender_email = $data['email'];
                 $ct_request->sender_nickname = trim($data['firstname']) . ' ' . trim($data['lastname']);
                 $ct_request->message = trim($data['comment']);
+                $ct_result = $ct->isAllowMessage($ct_request);
+                break;
+            default:
+                $ct_request->sender_nickname = isset($data['name']) ? trim($data['name']) : null;
+                $ct_request->sender_email = isset($data['email']) ? trim($data['email']) : null;
+                $ct_request->sender_email = is_null($ct_request->sender_email) && isset($data['mail']) ? trim($data['mail']) : null;
+                $ct_request->message = isset($data['text']) ? trim($data['text']) : null;
                 $ct_result = $ct->isAllowMessage($ct_request);
                 break;
         }
